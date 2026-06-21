@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#0ea5e9" />
+    <meta name="description" content="매일 짧게, 꾸준히. 1인용 영어 학습 앱" />
+
+    <!-- PWA / iOS home screen -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="입트영" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <title>입트영 English Habit</title>
+    <!-- Apply saved theme before paint to avoid light flash on dark mode. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('iptyeong.theme.v1') || 'system';
+          var sysDark =
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var dark = t === 'dark' || (t === 'system' && sysDark);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

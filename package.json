@@ -1,0 +1,19 @@
+{
+  "name": "iptyeong-english-habit-app",
+  "version": "0.1.0",
+  "private": true,
+  "description": "입트영 English Habit App - 1인용 영어 학습 PWA",
+  "scripts": {
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "dev": "npm-run-all --parallel dev:server dev:client",
+    "build:server": "npm --prefix server run build",
+    "build:client": "npm --prefix client run build",
+    "build": "npm run build:server && npm run build:client",
+    "start": "npm --prefix server run start"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
