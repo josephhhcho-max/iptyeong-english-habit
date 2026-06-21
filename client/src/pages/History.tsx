@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ShareButton from '../components/ShareButton';
 import { getActivityDays, getDayActivity } from '../lib/review';
 import type { DayActivity } from '../lib/review';
+import { buildDayShareText } from '../lib/share';
 
 const DOW_KOR = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
@@ -173,9 +175,19 @@ function DayDetail({
 
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
-        {label}
-      </h2>
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+          {label}
+        </h2>
+        {!empty && (
+          <ShareButton
+            size="md"
+            title={`${label} 학습 기록`}
+            text={buildDayShareText(activity)}
+            ariaLabel="이 날 학습 기록 전체 공유"
+          />
+        )}
+      </div>
 
       {empty ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center dark:border-slate-700 dark:bg-slate-800/50">
