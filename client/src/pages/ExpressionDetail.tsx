@@ -1,9 +1,11 @@
 ﻿import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import MySentencesSection from '../components/MySentencesSection';
+import ShareButton from '../components/ShareButton';
 import SimilarSection from '../components/SimilarSection';
 import SpeakButton from '../components/SpeakButton';
 import SpeedToggle from '../components/SpeedToggle';
+import { buildExpressionShareText } from '../lib/share';
 import { getExpression, getSession, updateExpression } from '../lib/store';
 import type { Expression, Session } from '../types';
 
@@ -52,6 +54,12 @@ export default function ExpressionDetail() {
             {expression.english}
           </h1>
           <div className="flex shrink-0 items-center gap-1">
+            <ShareButton
+              size="md"
+              title={expression.english}
+              text={buildExpressionShareText(expression, session)}
+              ariaLabel="이 표현 공유"
+            />
             <BookmarkToggle
               expression={expression}
               onUpdated={setExpression}

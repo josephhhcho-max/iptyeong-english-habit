@@ -209,7 +209,7 @@ function DayDetail({
           {activity.expressionsAdded.length > 0 && (
             <Card title={`추출된 표현 (${activity.expressionsAdded.length})`}>
               <ul className="space-y-1">
-                {activity.expressionsAdded.slice(0, 10).map((e) => (
+                {activity.expressionsAdded.map((e) => (
                   <li key={e.id} className="text-sm">
                     <Link
                       to={`/expression/${e.id}`}
@@ -224,11 +224,6 @@ function DayDetail({
                     </Link>
                   </li>
                 ))}
-                {activity.expressionsAdded.length > 10 && (
-                  <li className="px-1 text-xs text-slate-400">
-                    + {activity.expressionsAdded.length - 10}개 더
-                  </li>
-                )}
               </ul>
             </Card>
           )}

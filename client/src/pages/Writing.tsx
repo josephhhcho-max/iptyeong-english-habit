@@ -1,8 +1,10 @@
 ﻿import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ShareButton from '../components/ShareButton';
 import SpeakButton from '../components/SpeakButton';
 import SpeedToggle from '../components/SpeedToggle';
 import { getWritingFeedback, getWritingPrompt } from '../lib/api';
+import { buildWritingShareText } from '../lib/share';
 import {
   listExpressions,
   listSessions,
@@ -239,6 +241,7 @@ export default function Writing() {
       {stage.kind === 'feedback' && (
         <FeedbackBlock
           stage={stage}
+          topic={session.topic}
           onSave={savePiece}
           onNew={startNew}
         />
@@ -257,20 +260,38 @@ export default function Writing() {
 
 function FeedbackBlock({
   stage,
+  topic,
   onSave,
   onNew,
 }: {
   stage: Extract<Stage, { kind: 'feedback' }>;
+  topic: string;
   onSave: () => void;
   onNew: () => void;
 }) {
   const { prompt, userText, feedback, savedAs } = stage;
+  const sharePiece: WritingPiece = {
+    id: 'pending',
+    sessionId: '',
+    topic,
+    prompt,
+    userText,
+    feedback,
+    createdAt: new Date().toISOString(),
+  };
   return (
     <div className="space-y-3">
       <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-sm">
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
-          내가 쓴 글
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            내가 쓴 글
+          </p>
+          <ShareButton
+            title={`영작 — ${topic}`}
+            text={buildWritingShareText(sharePiece)}
+            ariaLabel="전체 영작 공유"
+          />
+        </div>
         <p className="mt-1 whitespace-pre-wrap text-sm text-slate-800 dark:text-slate-200">{userText}</p>
         <p className="mt-2 text-[10px] text-slate-400 dark:text-slate-500">과제: {prompt}</p>
       </div>
@@ -388,17 +409,24 @@ function PastWritingCard({ piece }: { piece: WritingPiece }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <li className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 p-3">
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="block w-full text-left"
-      >
-        <p className="text-[10px] text-slate-400 dark:text-slate-500">
-          {new Date(piece.createdAt).toLocaleString()}
-        </p>
-        <p className="mt-0.5 line-clamp-2 text-xs text-slate-600 dark:text-slate-400">{piece.prompt}</p>
-        <p className="mt-1 line-clamp-2 text-sm text-slate-800 dark:text-slate-200">{piece.userText}</p>
-      </button>
+      <div className="flex items-start justify-between gap-2">
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="block flex-1 text-left"
+        >
+          <p className="text-[10px] text-slate-400 dark:text-slate-500">
+            {new Date(piece.createdAt).toLocaleString()}
+          </p>
+          <p className="mt-0.5 line-clamp-2 text-xs text-slate-600 dark:text-slate-400">{piece.prompt}</p>
+          <p className="mt-1 line-clamp-2 text-sm text-slate-800 dark:text-slate-200">{piece.userText}</p>
+        </button>
+        <ShareButton
+          title={`영작 — ${piece.topic}`}
+          text={buildWritingShareText(piece)}
+          ariaLabel="이 영작 공유"
+        />
+      </div>
       {expanded && piece.feedback && (
         <div className="mt-3 space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
           {piece.feedback.corrections.length > 0 && (

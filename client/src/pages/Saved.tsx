@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ShareButton from '../components/ShareButton';
 import SpeakButton from '../components/SpeakButton';
+import { buildExpressionShareText } from '../lib/share';
 import {
+  getSession,
   listBookmarkedExpressions,
   listStruggledExpressions,
 } from '../lib/store';
@@ -111,6 +114,11 @@ export default function Saved() {
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-1.5">
+                    <ShareButton
+                      title={e.english}
+                      text={buildExpressionShareText(e, getSession(e.sessionId))}
+                      ariaLabel="이 표현 공유"
+                    />
                     <SpeakButton text={e.english} ariaLabel="발음 재생" />
                   </div>
                 </div>
